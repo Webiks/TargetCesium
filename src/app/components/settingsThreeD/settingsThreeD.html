@@ -1,0 +1,52 @@
+<!--<div class="select-3D">-->
+  <!--<img src="{{vm.image}}">-->
+<!--</div>-->
+<!--<div class="settings">-->
+  <!--<div class="height-D3">-->
+    <!--<div class="style-text">: גובה</div>-->
+    <!--<input ng-click="vm.heightSetting()" class="style-number" type="number">-->
+  <!--</div>-->
+  <!--&lt;!&ndash;&ndash;&gt;-->
+  <!--<div class="size-D3">-->
+    <!--<div class="style-text">: גודל</div>-->
+    <!--<input ng-click="vm.sizeSetting()"  ng-model="vm.size" class="style-number" type="number">-->
+  <!--</div>-->
+<!--</div>-->
+
+
+<!--&lt;!&ndash;&ndash;&gt;-->
+<!--<div class="settings-icon">-->
+  <!--<div class="orbit-D3">-->
+    <!--<img ng-click="vm.orbitSetting()" class="style-rotate" src="../assets/settings/rotate.svg">-->
+  <!--</div>-->
+
+
+  <!--&lt;!&ndash;<div class="orbit-D3">&ndash;&gt;-->
+  <!--&lt;!&ndash;<img ng-click="vm.orbitSetting()" class="style-orbit" src="../assets/settings/edit.svg">&ndash;&gt;-->
+  <!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->
+<div ng-if="threeDCtrl.display">
+<div>
+  <img ng-click="threeDCtrl.sizeSetting('+')" class="arrow-top" src="../assets/settings/play-arrow.svg">
+</div>
+<div>
+  <img ng-click="threeDCtrl.sizeSetting('-')" class="arrow-bottom" src="../assets/settings/play-arrow.svg">
+</div>
+<input ng-model="threeDCtrl.size" maxlength="20" type="text" class="test" />
+<div class="rotate-D3">
+  <div>
+    <img ng-click="threeDCtrl.rotateSideTop()" class="arrow-top" src="../assets/settings/play-arrow.svg">
+  </div>
+  <div>
+    <img ng-click="threeDCtrl.rotateSideLeft()" class="arrow-left" src="../assets/settings/play-arrow.svg">
+  </div>
+  <div>
+    <img ng-click="threeDCtrl.rotateSideRight()" class="arrow-right" src="../assets/settings/play-arrow.svg">
+  </div>
+  <div>
+    <img ng-click="threeDCtrl.rotateSideBottom()" class="arrow-bottom" src="../assets/settings/play-arrow.svg">
+  </div>
+
+</div>
+
+</div>

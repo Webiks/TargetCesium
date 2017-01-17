@@ -1,0 +1,8 @@
+.video-map{
+  position: absolute;
+  right: 34%;
+  text-align: -webkit-center;
+  top: 80px;
+  z-index: 1;
+  cursor: pointer;
+}

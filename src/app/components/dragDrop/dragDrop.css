@@ -1,0 +1,89 @@
+.open-3D-model {
+  position: absolute;
+  z-index: 1;
+  left: 25px;
+  top: 25px;
+  cursor: pointer;
+}
+.options-3d-models{
+  left: 25px;
+  top: 25px;
+  position: absolute;
+  z-index: 1;
+  height: calc(100% - 150px);
+  width: 300px;
+  border-radius: 10px  ;
+  background-color: rgba(54, 54, 54, 0.68);
+
+}
+.header{
+  height:50px ;
+  width: 300px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 10px 10px 0 0;
+}
+.close{
+  position: relative;
+  left: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+.models-3d{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: calc(100% - 57px);
+    display: block;
+  }
+
+.image-3D-model {
+  position: relative;
+  left: 36%;
+  bottom: 53px;
+  /*-webkit-transform: translateX(-50%);*/
+}
+
+.name {
+  color: #FFFFFF;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  bottom: 19px;
+  font-size: small;
+}
+
+
+
+
+.model {
+  float: left;
+  width: 70px;
+  height: 70px;
+  border: 2px solid #6a6a6a;
+  background-color: #4a4a4a;
+  line-height: 70px;
+  border-radius: 10px;
+  margin: 4px 11px 4px 11px;
+  transition: 1s ease-in-out;
+}
+.model:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+::-webkit-scrollbar {
+width: 12px;
+}
+
+/*::-webkit-scrollbar-track {*/
+/*-webkit-box-shadow: inset 0 0 6px rgba(52, 102, 53, 0.72);*/
+/*border-radius: 10px;*/
+/*}*/
+
+/*::-webkit-scrollbar-thumb {*/
+/*border-radius: 10px;*/
+/*-webkit-box-shadow: inset 0 0 6px rgba(36, 20, 43, 0.7);*/
+/*}*/
+/* For Safari 3.1 to 6.0 */
+
+
