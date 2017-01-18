@@ -30,7 +30,7 @@ class SettingsThreeDController {
         that.size = data.model._model.scale.getValue();
 
         var heading = Cesium.Math.toRadians(135);
-        var pitch = 10;
+        var pitch = 0;
         var roll = 0;
         var orientation = Cesium.Transforms.headingPitchRollQuaternion(data.model.position._value, heading, pitch, roll);
 

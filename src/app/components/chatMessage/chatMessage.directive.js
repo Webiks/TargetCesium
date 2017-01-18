@@ -7,7 +7,7 @@ export function ChatMessageDirective() {
   'ngInject';
   let directive = {
     restrict: 'E',
-    templateUrl: '../app/components/chatMessage/chatMessage.html',
+    templateUrl: 'app/components/chatMessage/chatMessage.html',
     controller: ChatMessageController,
     controllerAs: 'vm',
     bindToController: true

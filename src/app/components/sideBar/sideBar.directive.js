@@ -9,7 +9,7 @@ export function SideBarDirective() {
   'ngInject';
   let directive = {
     restrict: 'E',
-    templateUrl: '../app/components/sideBar/sideBar.html',
+    templateUrl: 'app/components/sideBar/sideBar.html',
     controller: SideBarController,
     controllerAs: 'vm',
     bindToController: true

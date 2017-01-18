@@ -48,8 +48,8 @@ export class PlayVideoService {
         },
         "model": {
           "gltf": value.data.treeDModel,//gltf
-          "scale": 2.0,
-          "minimumPixelSize": 128
+          "scale":value.data.scale,
+          "minimumPixelSize": 1
         },
         "position": {
           "epoch": "2012-08-04T10:00:00Z",
