@@ -2,6 +2,13 @@
   position: relative;
   right: 94px;
 }
+.label-size{
+color: #FFFFFF;
+}
+
+.label-height{
+  color: #FFFFFF;
+}
 
 .settings-icon {
   position: absolute;
