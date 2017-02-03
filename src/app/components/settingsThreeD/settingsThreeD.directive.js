@@ -37,26 +37,14 @@ class SettingsThreeDController {
         data.model.orientation =orientation
       }
 
-      $scope.$apply()
+      $scope.$evalAsync()
     });
-
-
-
-
 
     this.image = '';
     this.height = '';
     this.size = 0
   }
-  myFunct(keyEvent) {
-    if (keyEvent.which === 13)
-      alert('I am an alert');
-  }
 
-
-  select3D(model) {
-    console.log()
-  }
 
   pointsToCartographicArray(carteians) {
     if (!_.isArray(carteians) || !_.isObject(carteians[0]) || !carteians[0].x) {

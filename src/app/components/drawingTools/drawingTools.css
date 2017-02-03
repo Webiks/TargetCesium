@@ -1,0 +1,18 @@
+.drawing-tools {
+}
+
+.draw-polygon {
+  position: absolute;
+  z-index: 1;
+  left: 20px;
+  top: 85px;
+  cursor: pointer;
+}
+
+.draw-polyline {
+  position: absolute;
+  z-index: 1;
+  left: 20px;
+  top: 140px;
+  cursor: pointer;
+}

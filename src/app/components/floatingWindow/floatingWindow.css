@@ -1,0 +1,88 @@
+.floating-window {
+  position: absolute;
+  top: 0;
+  left: 70px;
+  z-index: 5;
+  display: block;
+  height: 250px;
+  width: 250px;
+  background-color: rgba(45, 45, 46, 0.8);
+  border-radius: 10px;
+}
+
+.button-image {
+  float: left;
+  width: 35px;
+  height: 35px;
+  border: 2px solid #6a6a6a;
+  background-color: #4a4a4a;
+  line-height: 47px;
+  text-align: center;
+  border-radius: 10px;
+  margin: 9px -1px 8px 12px;
+  transition: 1s ease-in-out;
+}
+
+.button-image:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+.total-number{
+  color: #FFFFFF;
+  font-size: x-small;
+  position: absolute;
+  background-color: red;
+  height: 15px;
+  line-height: normal;
+  border-radius: 8px;
+  width: 15px;
+}
+
+.image-3D {
+  height: 20px;
+  width: 20px;
+}
+.total-3D{
+  color: #ffffff;
+}
+.name {
+  color: #FFFFFF;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  bottom: 19px;
+  font-size: small;
+}
+
+.headline-form {
+}
+
+.body-form {
+}
+
+.bottom-form { /* position: relative; */
+}
+
+.ok {
+  background-color: #1e1e1e;
+  color: white;
+  height: 36px;
+  width: 123px;
+  position: absolute;
+  bottom: 0; /* right: 0; */
+  line-height: 2;
+  text-align: -webkit-center;
+}
+
+.cancel {
+  background-color: #1e1e1e;
+  color: white;
+  height: 36px;
+  width: 123px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  line-height: 2;
+  text-align: -webkit-center; /* border-radius: 4px; */
+}

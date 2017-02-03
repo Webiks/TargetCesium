@@ -28,7 +28,9 @@ class MapCesiumController {
   //init map cesium
   initMap() {
     Cesium.BingMapsApi.defaultKey = 'AroazdWsTmTcIx4ZE3SIicDXX00yEp9vuRZyn6pagjyjgS-VdRBfBNAVkvrucbqr';
-    this.viewer = new Cesium.Viewer('cesiumContainer');
+    this.viewer = new Cesium.Viewer('cesiumContainer',{
+      selectionIndicator : false
+    });
     this.createOrbitService.newOrbit(this.viewer);
   }
 

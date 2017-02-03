@@ -1,0 +1,8 @@
+.left-side-bar{
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  background-color: rgba(35, 35, 35, 0.72);
+  width: 70px;
+  height: 100%;
+}

@@ -1,6 +1,3 @@
-/**
- * Created by נתנאל מנצור on 12/10/2016.
- */
 export class PlayVideoService {
   constructor(createOrbitService) {
     'ngInject';
@@ -64,7 +61,7 @@ export class PlayVideoService {
   orderPath(path) {
     let paths = [];
     _.each(path, function (p, i) {
-      paths.push([i * 10, p.x, p.y, 30])
+      paths.push([i * 10, p.x, p.y, 10]) // TODO :Height model
     });
     return _.flattenDeep(paths);
   }

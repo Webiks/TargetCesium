@@ -1,0 +1,17 @@
+<div ng-if="FWCtrl.showForm" class="floating-window">
+  <div class="headline-form"></div>
+  <div class="body-form">
+    <div ng-repeat="item in FWCtrl.dragDropConfig.data">
+        <div class="button-image" ng-click="FWCtrl.setIcon(item)">
+          <div class="total-number" title="{{item.number}}" ng-if="item.number !== undefined">{{item.number}}</div>
+          <img class="image-3D" src="{{item.image}} " title="{{item.nameE}}">
+        </div>
+    </div>
+  <div class="total-3D">Total : {{FWCtrl.total3D}}</div>
+  </div>
+
+  <div class="bottom-form">
+    <div class="ok" ng-click="FWCtrl.ok()">ok</div>
+    <div class="cancel" ng-click="FWCtrl.cancel()">cancel</div>
+  </div>
+</div>

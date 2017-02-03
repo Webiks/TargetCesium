@@ -35,11 +35,11 @@ class DragDropController {
     d3.select('.open-3D-model')
       .style('display', 'block')
       .append('svg')
-      .attr("height", 60)
-      .attr("width", 60)
+      .attr("height", 40)
+      .attr("width", 40)
       .append("svg:image")
-      .attr("height", 60)
-      .attr("width", 60)
+      .attr("height", 40)
+      .attr("width", 40)
       .attr("xlink:href", 'assets/3d-printer.svg').on('click', function () {
       that.openModels = !that.openModels;
       if (!that.openModels) {
@@ -89,7 +89,7 @@ class DragDropController {
     scope.append('div')
       .attr('class', 'name')
       .text(function (d) {
-        return d.nameH;
+        return d.nameE;
       });
     scope.append('svg')
       .attr('class', 'image-3D-model')

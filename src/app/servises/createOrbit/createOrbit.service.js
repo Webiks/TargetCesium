@@ -1,15 +1,44 @@
-/**
- * Created by Netanel on 12/7/2016.
- */
 export class CreateOrbitService {
-  constructor(eventsHandlerService) {
+  constructor(eventsHandlerService, $rootScope, $compile) {
     'ngInject';
+    this.$compile = $compile;
+    this.$rootScope = $rootScope;
     this.eventsHandlerService = eventsHandlerService;
     this.listModelOrbit = new Map();
     this.url = "";
     this.dataModel = ""
   }
 
+  enableDrawPointsIntoPolygon(distantPointsPolygon,modelsSelected) {
+   _.each(modelsSelected,(model)=>{
+     this.dataModel =model;
+     this.url = this.dataModel.treeDModel;
+     let lat = distantPointsPolygon.southern + (Math.random() * (distantPointsPolygon.northern - distantPointsPolygon.southern));
+     let lng = distantPointsPolygon.western + (Math.random() * (distantPointsPolygon.eastern - distantPointsPolygon.western));
+     this.drawModel(lat,lng);
+    });
+
+  }
+
+
+
+  enableDrawPolygon(shape) {
+    this.classDrawPolygon = new polygonDraw(this.viewer);
+
+    return this.classDrawPolygon.setDraw(this.showPopup.bind(this), shape);
+  }
+
+  showPopup(entity) {
+    let scope = this.$rootScope.$new();
+    scope.config = {
+      entity: entity,
+      viewer: this.viewer
+    };
+    let child = this.$compile('<floating-window class="float-window" config="config"></floating-window>')(scope);
+    scope.$digest();
+    let body = document.getElementsByTagName('BODY')[0];
+    body.appendChild(child[0]);
+  }
 
   setUrl(url) {
     this.url = url
@@ -74,6 +103,7 @@ export class CreateOrbitService {
       staticOrbit: []
     });
     //this.viewer.trackedEntity = model;
+    this.url = "";
   }
 
   disableCameraMotion(state) {
@@ -189,45 +219,130 @@ export class CreateOrbitService {
 
 }
 
-class cesiumInstance {
+class polygonDraw {
   constructor(viewer) {
-    this.viewer = viewer;
-    this.handler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
+    this._viewer = viewer;
+    this.entityDraw = false;
+    this._eventHandler = new Cesium.ScreenSpaceEventHandler(this._viewer.canvas);
   }
 
-  eventsHandlers() {
-    this.handler.setInputAction((click)=>this.mouseClick(click), Cesium.ScreenSpaceEventType.LEFT_CLICK);
+  get eventHandler() {
+    return this._eventHandler;
   }
 
-  mouseClick(click) {
+  set eventHandler(eventHandler) {
+    this._eventHandler = eventHandler;
+  }
+
+  initDraw(shape) {
+    this._setupEvents();
+    this.typeShape = shape;
+    this.drawingEntitiy = this.viewer.entities.getOrCreateEntity('drawingEntity');
+    this.polygonPositions = [];
+    const positionCBP = new Cesium.CallbackProperty(()=> {
+      return this.polygonPositions;
+    }, false);
+    this.drawingEntitiy.show = true;
+    this.drawingEntitiy.polyline = {
+      positions: positionCBP
+    };
+    this.drawingEntitiy[shape].material = Cesium.Color.BLUE;
+  }
+
+  _setupEvents() {
+    this._eventHandler.setInputAction((click)=>this.mouseLeft(click), Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    this._eventHandler.setInputAction((movement)=>this.mouseMove(movement), Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    this._eventHandler.setInputAction(()=>this.drawEnd(), Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+  }
+
+  get viewer() {
+    return this._viewer;
+  }
+
+  drawEnd() {
+    this.viewer.trackedEntity = undefined;
+    this.entityDraw = false;
+    if (this.typeShape === 'polygon') {
+      this.polygonPositions.splice(this.polygonPositions.length - 2, 2, this.polygonPositions[0]);
+    }
+
+    this.showPopup(this.convertToGeoJson(this.pointsToCartographicArray(this.polygonPositions)));
+    this.disableCameraMotion(true, this.viewer);
+    this._eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    this._eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    this._eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
   }
 
+  convertToGeoJson(coordinates) {
+    return {
+      type: this.typeShape,
+      coordinates: coordinates
+    }
+  }
+
+  pointsToCartographicArray(carteians) {
+    if (!_.isArray(carteians) || !_.isObject(carteians[0]) || !carteians[0].x) {
+      return [];
+    }
+    return _.map(carteians, (carteian)=> {
+      let cartographics = Cesium.Cartographic.fromCartesian(carteian);
+      cartographics.longitude = Cesium.Math.toDegrees(cartographics.longitude);
+      cartographics.latitude = Cesium.Math.toDegrees(cartographics.latitude);
+      return cartographics;
+    });
+  }
+
+  removeEntity(entity) {
+    this.viewer.entities.remove(entity);
+  }
+
+
+  disableCameraMotion(state, viewer) {
+    viewer.scene.screenSpaceCameraController.enableRotate = state;
+    viewer.scene.screenSpaceCameraController.enableZoom = state;
+    viewer.scene.screenSpaceCameraController.enableLook = state;
+    viewer.scene.screenSpaceCameraController.enableTilt = state;
+    viewer.scene.screenSpaceCameraController.enableTranslate = state;
+  }
+
+  setDraw(showPopup, shape) {
+    this.initDraw(shape);
+    this.showPopup = showPopup;
+    //this.onDrawUpdate = _.isFunction(_onDrawUpdate) ? _onDrawUpdate : ()=> {};
+    this.disableCameraMotion(false, this.viewer);
+    return this;
+  }
+
+  mouseLeft(click) {
+    let position = this.viewer.camera.pickEllipsoid(click.position, this.viewer.scene.globe.ellipsoid);
+    if (_.isUndefined(position)) {
+      return;
+    }
+
+    this.polygonPositions.push(position);
+    if (this.polygonPositions.length === 1) {
+      this.polygonPositions.push(position);
+    }
+    //const geoJson = this.convertToGeoJson(this.pointsToCartographicArray(this.polygonPositions));
+    //this.onDrawUpdate(geoJson);
+    this.entityDraw = true;
+    return this;
+  }
+
+  mouseMove(movement) {
+    if (!this.entityDraw) {
+      return;
+    }
+
+    const endPoint = this.viewer.camera.pickEllipsoid(movement.endPosition, this.viewer.scene.globe.ellipsoid);
+
+    if (_.isUndefined(endPoint)) {
+      return;
+    }
+    this.polygonPositions[this.polygonPositions.length - 1] = endPoint;
+    return this;
+  }
 }
 
-class modelEdit {
-  constructor(viewer) {
-    this.viewer = viewer;
-    this.handler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
-  }
-
-  eventsHandlers() {
-
-    this.handler.setInputAction(()=>this.removeEvents(), Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
-    this.handler.setInputAction((click)=>this.mouseLeftClick(click), Cesium.ScreenSpaceEventType.LEFT_DOWN);
-    this.handler.setInputAction((movement)=>this.mouseMove(movement), Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-  }
-
-  removeEvents() {
-    this.handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
-    this.handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOWN)
-    this.handler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE)
-  }
-
-  mouseLeftClick() {
-  }
-
-  mouseMove() {
-  }
-}
 

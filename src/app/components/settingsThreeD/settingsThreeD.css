@@ -88,33 +88,34 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-.arrow-top {
-  cursor: pointer;
-  width: 15px;
-  height: 15px;
-  transform: rotate(270deg);
-}
+.route-scope{
+  background-color: #363636;
 
-.arrow-bottom {
-  cursor: pointer;
-  width: 15px;
-  height: 15px;
-  transform: rotate(90deg);
-}
-
-.arrow-right {
-  cursor: pointer;
-  width: 15px;
-  height: 15px;
-  position: relative;
-  left: 20px;
-}
-
-.arrow-left {
-  transform: rotate(60deg);
-  cursor: pointer;
-  width: 15px;
+  left: 12px;
   position: absolute;
-  left: 125px;
-  height: 15px;
+  box-shadow: #7b7c69 0 0 2px 0;
+  width: 35px;
+  height: 35px;
+
+}
+
+.route-img {
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+}
+.polygon-scope{
+  background-color: #363636;
+
+  left: 12px;
+  position: absolute;
+  box-shadow: #7b7c69 0 0 2px 0;
+  width: 35px;
+  height: 35px;
+
+}
+.polygon-img{
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
 }

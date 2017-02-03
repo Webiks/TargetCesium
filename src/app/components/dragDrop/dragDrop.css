@@ -1,7 +1,7 @@
 .open-3D-model {
   position: absolute;
   z-index: 1;
-  left: 25px;
+  left: 15px;
   top: 25px;
   cursor: pointer;
 }
@@ -9,7 +9,7 @@
   left: 25px;
   top: 25px;
   position: absolute;
-  z-index: 1;
+  z-index: 6;
   height: calc(100% - 150px);
   width: 300px;
   border-radius: 10px  ;
@@ -42,7 +42,7 @@
   /*-webkit-transform: translateX(-50%);*/
 }
 
-.name {
+.image-name {
   color: #FFFFFF;
   text-align: center;
   white-space: nowrap;

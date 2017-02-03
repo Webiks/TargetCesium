@@ -1,6 +1,4 @@
-/**
- * Created by נתנאל מנצור on 12/31/2016.
- */
+
 /**
  * Created by netanel on 11/23/2016.
  */
