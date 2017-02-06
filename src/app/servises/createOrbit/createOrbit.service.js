@@ -9,18 +9,65 @@ export class CreateOrbitService {
     this.dataModel = ""
   }
 
-  enableDrawPointsIntoPolygon(distantPointsPolygon,modelsSelected) {
-   _.each(modelsSelected,(model)=>{
-     this.dataModel =model;
-     this.url = this.dataModel.treeDModel;
-     let lat = distantPointsPolygon.southern + (Math.random() * (distantPointsPolygon.northern - distantPointsPolygon.southern));
-     let lng = distantPointsPolygon.western + (Math.random() * (distantPointsPolygon.eastern - distantPointsPolygon.western));
-     this.drawModel(lat,lng);
+  enableDrawPointsIntoPolyline(model, coordinates) {
+    this.dataModel = model[0];
+    this.url = this.dataModel.treeDModel;
+    let cartesian = [];
+    let latLng = [];
+    _.each(coordinates, (coordinate)=> {
+      cartesian.push(Cesium.Cartesian3.fromDegrees(coordinate.longitude, coordinate.latitude));
+    });
+    _.each(coordinates, (coordinate)=> {
+      latLng.push({x :coordinate.longitude, y :coordinate.latitude});
+    });
+    this.dataModel.path = latLng;
+    this.drawPoyline(cartesian);
+    this.drawModel(coordinates[coordinates.length - 1].longitude, coordinates[coordinates.length - 1].latitude);
+  }
+
+  enableDrawPointsIntoPolygon(distantPointsPolygon, modelsSelected) {
+    _.each(modelsSelected, (model)=> {
+      this.dataModel = model;
+      this.url = this.dataModel.treeDModel;
+      let lat = distantPointsPolygon.southern + (Math.random() * (distantPointsPolygon.northern - distantPointsPolygon.southern));
+      let lng = distantPointsPolygon.western + (Math.random() * (distantPointsPolygon.eastern - distantPointsPolygon.western));
+      this.drawModel(lat, lng);
     });
 
   }
 
+  drawModel(long, lat) {
+    let scaleCBP = function () {
+      return scale;
+    };
+    let scale = this.dataModel.scale;
+    let name = this.dataModel.nameE;
+    let position = Cesium.Cartesian3.fromDegrees(long, lat);
+    let model = this.viewer.entities.add({
+      name: name,
+      position: position,
+      model: {
+        uri: this.url,
+        scale: new Cesium.CallbackProperty(scaleCBP, false)
+      }
+    });
 
+    this.listModelOrbit.set(model.id, {
+      value: "model",
+      data: this.dataModel,
+      model: model,
+      url: this.url,
+      interimOrbit: [position],
+      path: this.dataModel.path === undefined ?[{x: Number(long), y: Number(lat)}]:this.dataModel.path,
+      staticOrbit: []
+    });
+    //this.viewer.trackedEntity = model;
+    this.url = "";
+  }
+
+  removeById(id) {
+    this.viewer.entities.removeById(id);
+  }
 
   enableDrawPolygon(shape) {
     this.classDrawPolygon = new polygonDraw(this.viewer);
@@ -77,34 +124,6 @@ export class CreateOrbitService {
     this.viewer.dataSources.add(Cesium.CzmlDataSource.load(czml))
   }
 
-  drawModel(long, lat) {
-    let scaleCBP = function () {
-      return scale;
-    };
-    let scale = this.dataModel.scale;
-    let name = this.dataModel.nameE;
-    let position = Cesium.Cartesian3.fromDegrees(long, lat);
-    let model = this.viewer.entities.add({
-      name: name,
-      position: position,
-      model: {
-        uri: this.url,
-        scale: new Cesium.CallbackProperty(scaleCBP, false)
-      }
-    });
-
-    this.listModelOrbit.set(model.id, {
-      value: "model",
-      data: this.dataModel,
-      model: model,
-      url: this.url,
-      interimOrbit: [position],
-      path: [{x: Number(long), y: Number(lat)}],
-      staticOrbit: []
-    });
-    //this.viewer.trackedEntity = model;
-    this.url = "";
-  }
 
   disableCameraMotion(state) {
     this.viewer.scene.screenSpaceCameraController.enableRotate = state;
@@ -246,7 +265,7 @@ class polygonDraw {
     this.drawingEntitiy.polyline = {
       positions: positionCBP
     };
-    this.drawingEntitiy[shape].material = Cesium.Color.BLUE;
+    //this.drawingEntitiy[shape].material = Cesium.Color.BLUE;
   }
 
   _setupEvents() {

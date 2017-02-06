@@ -16,3 +16,11 @@
   top: 140px;
   cursor: pointer;
 }
+
+.remove-shape {
+  position: absolute;
+  z-index: 1;
+  left: 20px;
+  top: 190px;
+  cursor: pointer;
+}

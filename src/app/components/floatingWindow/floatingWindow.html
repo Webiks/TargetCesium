@@ -2,12 +2,15 @@
   <div class="headline-form"></div>
   <div class="body-form">
     <div ng-repeat="item in FWCtrl.dragDropConfig.data">
-        <div class="button-image" ng-click="FWCtrl.setIcon(item)">
-          <div class="total-number" title="{{item.number}}" ng-if="item.number !== undefined">{{item.number}}</div>
-          <img class="image-3D" src="{{item.image}} " title="{{item.nameE}}">
-        </div>
+      <div ng-if="FWCtrl.config.entity.type === 'polyline'" ng-class="{'button-image':!item.selected ||item.selected == undefined,'image-3D-selected':item.selected}" ng-click="FWCtrl.setModel_polyline(item)">
+        <img class="image-3D" src="{{item.image}} " title="{{item.nameE}}">
+      </div>
+      <div ng-if="FWCtrl.config.entity.type === 'polygon'" class="button-image" ng-click="FWCtrl.setModels_polygon(item)">
+        <div class="total-number" title="{{item.number}}" ng-if="item.number !== undefined">{{item.number}}</div>
+        <img class="image-3D" src="{{item.image}} " title="{{item.nameE}}">
+      </div>
     </div>
-  <div class="total-3D">Total : {{FWCtrl.total3D}}</div>
+    <div  ng-if="FWCtrl.config.entity.type === 'polygon'"  class="total-3D">Total : {{FWCtrl.total3D}}</div>
   </div>
 
   <div class="bottom-form">

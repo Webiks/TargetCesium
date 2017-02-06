@@ -31,6 +31,14 @@ class MapCesiumController {
     this.viewer = new Cesium.Viewer('cesiumContainer',{
       selectionIndicator : false
     });
+
+
+    let cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
+      url : 'https://assets.agi.com/stk-terrain/world',
+      requestWaterMask : true,
+      requestVertexNormals : true
+    });
+    this.viewer.terrainProvider = cesiumTerrainProviderMeshes;
     this.createOrbitService.newOrbit(this.viewer);
   }
 

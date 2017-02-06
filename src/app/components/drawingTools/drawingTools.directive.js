@@ -46,26 +46,45 @@ class DrawingToolsController {
       .attr("xlink:href", 'assets/images/polyline.svg').on('click', () => {
       that.drawPolyline();
     });
+
+    drawingTools.append('div')
+      .attr("class", "remove-shape")
+      .append('svg')
+      .attr("height", 30)
+      .attr("width", 30)
+      .append("svg:image")
+      .attr("height", 30)
+      .attr("width", 30)
+      .attr("xlink:href", 'assets/dustbin.svg').on('click', () => {
+      that.removeShape();
+    });
   }
 
 
   initEntities() {
     this.entity = this.createOrbitService.viewer.entities.getOrCreateEntity('drawingEntity');
-    this.entity.polygon = new Cesium.PolygonGraphics({});
+    this.entity.polygon = new Cesium.PolygonGraphics({
+    });
     this.entity.polygon.hierarchy = null;
-    this.entity.polyline = new Cesium.PolylineGraphics({});
+    this.entity.polyline = new Cesium.PolylineGraphics({
+    });
     this.entity.polyline.positions = null;
   }
 
   drawPolygon() {
     this.entity.position = null;
     this.entity.polyline.positions = null;
-    this.createOrbitService.enableDrawPolygon('polygon')
+    this.createOrbitService.enableDrawPolygon('polygon');
   }
 
   drawPolyline() {
     this.entity.position = null;
     this.entity.polygon.hierarchy = null;
-    this.createOrbitService.enableDrawPolygon('polyline')
+    this.createOrbitService.enableDrawPolygon('polyline');
+
+  }
+
+  removeShape(){
+    this.createOrbitService.removeById('drawingEntity')
   }
 }

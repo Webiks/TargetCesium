@@ -45,12 +45,12 @@ export class PlayVideoService {
         },
         "model": {
           "gltf": value.data.treeDModel,//gltf
-          "scale":value.data.scale,
+          "scale":value.model._model.scale.getValue(),//
           "minimumPixelSize": 1
         },
         "position": {
           "epoch": "2012-08-04T10:00:00Z",
-          "cartographicDegrees": that.orderPath(value.path)//positions
+          "cartographicDegrees": that.orderPath(value.path,that.pointsToCartographicArray([value.model.position._value])[0].height)//positions
         }
       })
     }
@@ -58,11 +58,24 @@ export class PlayVideoService {
     return this.czml;
   }
 
-  orderPath(path) {
+  orderPath(path,height) {
     let paths = [];
     _.each(path, function (p, i) {
-      paths.push([i * 10, p.x, p.y, 10]) // TODO :Height model
+      paths.push([i * 10, p.x, p.y, height]) // TODO :Height model
     });
     return _.flattenDeep(paths);
+  }
+
+  pointsToCartographicArray(carteians) {
+    if (!_.isArray(carteians) || !_.isObject(carteians[0]) || !carteians[0].x) {
+      return [];
+    }
+    return  _.map(carteians, (carteian)=> {
+      let cartographics = Cesium.Cartographic.fromCartesian(carteian);
+      cartographics.longitude = Cesium.Math.toDegrees(cartographics.longitude);
+      cartographics.latitude = Cesium.Math.toDegrees(cartographics.latitude);
+      return cartographics;
+    });
+
   }
 }
