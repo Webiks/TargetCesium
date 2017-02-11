@@ -83,7 +83,7 @@ class DragDropController {
     let scope = div.append('div')
       .attr('class', 'model')
       .on('click', function (d) {
-        that.createOrbitService.setDataModel(d);
+        that.createOrbitService.enableDrawModel(d);
       });
 
     scope.append('div')

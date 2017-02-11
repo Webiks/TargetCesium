@@ -64,7 +64,7 @@ class FloatingWindowController {
     this.removeAllSelected();
 
     if(this.config.entity.type === 'polyline'){
-      this.createOrbitService.enableDrawPointsIntoPolyline(this.modelsSelected,this.config.entity.coordinates);
+      this.createOrbitService.enableDrawPointsIntoPolyline(this.modelsSelected,this.config.entity.polylinePositions);
     }else {
       this.createOrbitService.enableDrawPointsIntoPolygon(this.distantPointsPolygon, this.modelsSelected);
     }

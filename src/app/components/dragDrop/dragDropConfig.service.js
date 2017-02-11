@@ -15,7 +15,7 @@ export class DragDropConfig {
         nameE: 'plant',
         image: 'assets/images/tree.svg',
         treeDModel: 'assets/images/d3Model/Growing/plant/model.gltf',
-        scale:1000
+        scale:1
       },
       {
         id:'2',
@@ -23,7 +23,7 @@ export class DragDropConfig {
         nameE: 'home',
         image: 'assets/images/home.svg',
         treeDModel: 'assets/images/d3Model/Inanimate/home/model.gltf',
-        scale:2500
+        scale:2
       },
       {
         id:'3',
@@ -31,28 +31,28 @@ export class DragDropConfig {
         nameE: 'Church',
         image: 'assets/images/church.svg',
         treeDModel: 'assets/images/d3Model/Inanimate/Church/model.gltf',
-        scale:100
+        scale:1
       }, {
         id:'4',
         nameH: 'רובה צלפים',
         nameE: 'SniperRifle',
         image: 'assets/images/Weapon.svg',
         treeDModel: 'assets/images/d3Model/Inanimate/SniperRifle/model.gltf',
-        scale:50
+        scale:1
       }, {
         id:'5',
         nameH: 'מחבל',
         nameE: 'terrorist',
         image: 'assets/images/terrorist.svg',
         treeDModel: 'assets/images/d3Model/Live/badPeople/terrorist/model.gltf',
-        scale:3000
+        scale:5
       }, {
         id:'6',
         nameH: 'חייל',
         nameE: 'soldier',
         image: 'assets/images/soldier.svg',
         treeDModel: 'assets/images/d3Model/Live/goodPeople/Soldier/model.gltf',
-        scale:70
+        scale:0.1
       },
       {
         id:'7',
@@ -60,7 +60,7 @@ export class DragDropConfig {
         nameE: 'woman',
         image: 'assets/images/girl.svg',
         treeDModel: 'assets/images/d3Model/Live/goodPeople/woman/model.gltf',
-        scale:1000
+        scale:10
       },
       //{
       //  nameH: 'טייס',
@@ -74,7 +74,7 @@ export class DragDropConfig {
         nameE: 'policeman',
         image: 'assets/images/policeman.svg',
         treeDModel: 'assets/images/d3Model/Live/goodPeople/policeman/model.gltf',
-        scale:900
+        scale:10
       },
       {
         id:'9',
@@ -82,7 +82,7 @@ export class DragDropConfig {
         nameE: 'armyTruck',
         image: 'assets/images/truck.svg',
         treeDModel: 'assets/images/d3Model/Vehicle/ArmyTruck/model.gltf',
-        scale:2000
+        scale:2
       },
       {
         id:'10',
@@ -90,28 +90,28 @@ export class DragDropConfig {
         nameE: 'car',
         image: 'assets/images/redCar.svg',
         treeDModel: 'assets/images/d3Model/Vehicle/ChevroletCar/model.gltf',
-        scale:2700
+        scale:27
       }, {
         id:'11',
         nameH: 'מטוס קרב',
         nameE: 'fighterJet',
         image: 'assets/images/FighterJet.svg',
         treeDModel: 'assets/images/d3Model/Vehicle/fighterJet/model.gltf',
-        scale:2000
+        scale:20
       }, {
         id:'12',
         nameH: 'מטוס',
         nameE: 'plane',
         image: 'assets/images/plane.svg',
         treeDModel: 'assets/images/d3Model/Vehicle/plane/model.gltf',
-        scale:2000
+        scale:20
       }, {
         id:'13',
         nameH: 'ספינה',
         nameE: 'ship',
         image: 'assets/images/ship.svg',
         treeDModel: 'assets/images/d3Model/Vehicle/ship/model.gltf',
-        scale:40
+        scale:0.01
       },
       {
         id:'14',
@@ -119,7 +119,7 @@ export class DragDropConfig {
         nameE: 'tank',
         image: 'assets/images/tank.svg',
         treeDModel: 'assets/images/d3Model/Vehicle/tank/model.gltf',
-        scale:2700
+        scale:5
       },
       {
         id:'15',
@@ -127,7 +127,7 @@ export class DragDropConfig {
         nameE: 'tractor',
         image: 'assets/images/tractor.svg',
         treeDModel: 'assets/images/d3Model/Vehicle/tractor/model.gltf',
-        scale:40
+        scale:0.1
       }]
   }
 }

@@ -9,20 +9,29 @@ export class CreateOrbitService {
     this.dataModel = ""
   }
 
-  enableDrawPointsIntoPolyline(model, coordinates) {
-    this.dataModel = model[0];
-    this.url = this.dataModel.treeDModel;
-    let cartesian = [];
-    let latLng = [];
-    _.each(coordinates, (coordinate)=> {
-      cartesian.push(Cesium.Cartesian3.fromDegrees(coordinate.longitude, coordinate.latitude));
+  enableDrawPointsIntoPolyline(dataModel, coordinates) {
+    let scaleCBP = function () {
+      return dataModel[0].scale;
+    };
+   let entity = this.viewer.entities.add({
+      name: dataModel[0].nameE,
+      position: new Cesium.CallbackProperty(()=> {
+        return coordinates[coordinates.length -1];
+      }, false),
+      model: {
+        uri: dataModel[0].treeDModel,
+        scale: new Cesium.CallbackProperty(scaleCBP, false)
+      }
     });
-    _.each(coordinates, (coordinate)=> {
-      latLng.push({x :coordinate.longitude, y :coordinate.latitude});
-    });
-    this.dataModel.path = latLng;
-    this.drawPoyline(cartesian);
-    this.drawModel(coordinates[coordinates.length - 1].longitude, coordinates[coordinates.length - 1].latitude);
+
+    const positionCBP = new Cesium.CallbackProperty(()=> {
+      return coordinates;
+    }, false);
+    entity.show = true;
+    entity.polyline = {
+      positions: positionCBP
+    };
+    entity.polyline.material = Cesium.Color.PERU;
   }
 
   enableDrawPointsIntoPolygon(distantPointsPolygon, modelsSelected) {
@@ -52,21 +61,24 @@ export class CreateOrbitService {
       }
     });
 
-    this.listModelOrbit.set(model.id, {
-      value: "model",
-      data: this.dataModel,
-      model: model,
-      url: this.url,
-      interimOrbit: [position],
-      path: this.dataModel.path === undefined ?[{x: Number(long), y: Number(lat)}]:this.dataModel.path,
-      staticOrbit: []
-    });
-    //this.viewer.trackedEntity = model;
-    this.url = "";
   }
 
   removeById(id) {
     this.viewer.entities.removeById(id);
+  }
+
+
+
+  enableDrawModel(dataModel) {
+    this.classModelDraw = new modelDraw(this.viewer);
+
+    return this.classModelDraw.setDraw(dataModel);
+  }
+
+  enableDrawModelTrack(id) {
+    this.classModelDrawTrack = new modelDrawTrack(this.viewer);
+
+    return this.classModelDrawTrack.setDraw(id);
   }
 
   enableDrawPolygon(shape) {
@@ -151,24 +163,37 @@ export class CreateOrbitService {
 
   mouseLeftClick(click) {
 
-    if (this.url !== "") {
+    //if (this.url !== "") {
+    //
+    //  let cartesian = this.viewer.camera.pickEllipsoid(click.position, this.scene.globe.ellipsoid);
+    //  if (cartesian) {
+    //    let cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+    //    let longitudeString = Cesium.Math.toDegrees(cartographic.longitude).toFixed(2);
+    //    let latitudeString = Cesium.Math.toDegrees(cartographic.latitude).toFixed(2);
+    //    this.drawModel(longitudeString, latitudeString);
+    //  }
+    //  this.url = "";
+    //}
 
-      let cartesian = this.viewer.camera.pickEllipsoid(click.position, this.scene.globe.ellipsoid);
-      if (cartesian) {
-        let cartographic = Cesium.Cartographic.fromCartesian(cartesian);
-        let longitudeString = Cesium.Math.toDegrees(cartographic.longitude).toFixed(2);
-        let latitudeString = Cesium.Math.toDegrees(cartographic.latitude).toFixed(2);
-        this.drawModel(longitudeString, latitudeString);
-      }
-      this.url = "";
-    }
+    //this.viewer.entities._entities._array[1].id
     let pickedObject = this.viewer.scene.pick(click.position);
-    if (Cesium.defined(pickedObject) && this.listModelOrbit.has(pickedObject.id.id)) {
+    if (Cesium.defined(pickedObject) && this.searchEntity(pickedObject.id.id)) {
       this.eventsHandlerService.evokeCallbacks('getData', {model: pickedObject.id, display: true});
     } else {
       this.eventsHandlerService.evokeCallbacks('getData', {model: '', display: false});
     }
 
+  }
+
+  searchEntity(id) {
+    let available = false;
+    _.each(this.viewer.entities._entities._array, (entity)=> {
+      if (entity.id === id) {
+        available = true;
+        return false;
+      }
+    });
+    return available;
   }
 
   drawPoyline(position) {
@@ -296,7 +321,8 @@ class polygonDraw {
   convertToGeoJson(coordinates) {
     return {
       type: this.typeShape,
-      coordinates: coordinates
+      coordinates: coordinates,
+      polylinePositions : this.polygonPositions
     }
   }
 
@@ -363,5 +389,209 @@ class polygonDraw {
     return this;
   }
 }
+class modelDraw{
+  constructor(viewer) {
+    this._viewer = viewer;
+    this.entityDraw = false;
+    this._eventHandler = new Cesium.ScreenSpaceEventHandler(this._viewer.canvas);
+  }
+
+  get eventHandler() {
+    return this._eventHandler;
+  }
+
+  set eventHandler(eventHandler) {
+    this._eventHandler = eventHandler;
+  }
+
+  initDraw(dataModel) {
+    this._setupEvents();
+    let scaleCBP = function () {
+      return dataModel.scale;
+    };
+    this.positions;
+    this.drawingEntitiy = this.viewer.entities.add({
+      name: dataModel.nameE,
+      position: new Cesium.CallbackProperty(()=> {
+        return this.positions;
+      }, false),
+      model: {
+        uri: dataModel.treeDModel,
+        scale: new Cesium.CallbackProperty(scaleCBP, false)
+      }
+    });
+
+  }
+
+  _setupEvents() {
+    this._eventHandler.setInputAction((click)=>this.mouseLeft(click), Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    this._eventHandler.setInputAction(()=>this.drawEnd(), Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+  }
+
+  get viewer() {
+    return this._viewer;
+  }
+
+  drawEnd() {
+    this.viewer.trackedEntity = undefined;
+    this.entityDraw = false;
+    //this.showPopup(this.convertToGeoJson(this.pointsToCartographicArray(this.polygonPositions)));
+    this.disableCameraMotion(true, this.viewer);
+    this._eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    this._eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+
+  }
+
+  removeEntity(entity) {
+    this.viewer.entities.remove(entity);
+  }
 
 
+  disableCameraMotion(state, viewer) {
+    viewer.scene.screenSpaceCameraController.enableRotate = state;
+    viewer.scene.screenSpaceCameraController.enableZoom = state;
+    viewer.scene.screenSpaceCameraController.enableLook = state;
+    viewer.scene.screenSpaceCameraController.enableTilt = state;
+    viewer.scene.screenSpaceCameraController.enableTranslate = state;
+  }
+
+  setDraw(dataModel) {
+    this.initDraw(dataModel);
+    this.disableCameraMotion(false, this.viewer);
+    return this;
+  }
+
+  mouseLeft(click) {
+    let position = this.viewer.camera.pickEllipsoid(click.position, this.viewer.scene.globe.ellipsoid);
+    if (_.isUndefined(position)) {
+      return;
+    }
+    this.positions = position;
+  }
+
+}
+
+class modelDrawTrack {
+  constructor(viewer) {
+    this._viewer = viewer;
+    this.entityDraw = false;
+    this._eventHandler = new Cesium.ScreenSpaceEventHandler(this._viewer.canvas);
+  }
+
+  get eventHandler() {
+    return this._eventHandler;
+  }
+
+  set eventHandler(eventHandler) {
+    this._eventHandler = eventHandler;
+  }
+
+  initDraw(id) {
+    this._setupEvents();
+    this.drawingEntitiy = this.viewer.entities.getOrCreateEntity(id);
+
+    this.polygonPositions = [];
+
+    const positionCBP = new Cesium.CallbackProperty(()=> {
+      return this.polygonPositions;
+    }, false);
+    this.drawingEntitiy.show = true;
+    this.drawingEntitiy.polyline = {
+      positions: positionCBP
+    };
+    this.drawingEntitiy.polyline.material = Cesium.Color.PERU;
+  }
+
+  _setupEvents() {
+    this._eventHandler.setInputAction((click)=>this.mouseLeft(click), Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    this._eventHandler.setInputAction((movement)=>this.mouseMove(movement), Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    this._eventHandler.setInputAction(()=>this.drawEnd(), Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+  }
+
+  get viewer() {
+    return this._viewer;
+  }
+
+  drawEnd() {
+    this.viewer.trackedEntity = undefined;
+    this.entityDraw = false;
+    //this.showPopup(this.convertToGeoJson(this.pointsToCartographicArray(this.polygonPositions)));
+    this.disableCameraMotion(true, this.viewer);
+    this._eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    this._eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    this._eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+
+  }
+
+  convertToGeoJson(coordinates) {
+    return {
+      data: this.typeShape,
+      coordinates: coordinates
+    }
+  }
+
+  pointsToCartographicArray(carteians) {
+    if (!_.isArray(carteians) || !_.isObject(carteians[0]) || !carteians[0].x) {
+      return [];
+    }
+    return _.map(carteians, (carteian)=> {
+      let cartographics = Cesium.Cartographic.fromCartesian(carteian);
+      cartographics.longitude = Cesium.Math.toDegrees(cartographics.longitude);
+      cartographics.latitude = Cesium.Math.toDegrees(cartographics.latitude);
+      return cartographics;
+    });
+  }
+
+  removeEntity(entity) {
+    this.viewer.entities.remove(entity);
+  }
+
+
+  disableCameraMotion(state, viewer) {
+    viewer.scene.screenSpaceCameraController.enableRotate = state;
+    viewer.scene.screenSpaceCameraController.enableZoom = state;
+    viewer.scene.screenSpaceCameraController.enableLook = state;
+    viewer.scene.screenSpaceCameraController.enableTilt = state;
+    viewer.scene.screenSpaceCameraController.enableTranslate = state;
+  }
+
+  setDraw(id) {
+    this.initDraw(id);
+    //this.showPopup = showPopup;
+    //this.onDrawUpdate = _.isFunction(_onDrawUpdate) ? _onDrawUpdate : ()=> {};
+    this.disableCameraMotion(false, this.viewer);
+    return this;
+  }
+
+  mouseLeft(click) {
+    let position = this.viewer.camera.pickEllipsoid(click.position, this.viewer.scene.globe.ellipsoid);
+    if (_.isUndefined(position)) {
+      return;
+    }
+
+    this.polygonPositions.push(position);
+    if (this.polygonPositions.length === 1) {
+      this.polygonPositions.push(position);
+    }
+    //const geoJson = this.convertToGeoJson(this.pointsToCartographicArray(this.polygonPositions));
+    //this.onDrawUpdate(geoJson);
+    this.entityDraw = true;
+    return this;
+  }
+
+  mouseMove(movement) {
+    if (!this.entityDraw) {
+      return;
+    }
+
+    const endPoint = this.viewer.camera.pickEllipsoid(movement.endPosition, this.viewer.scene.globe.ellipsoid);
+
+    if (_.isUndefined(endPoint)) {
+      return;
+    }
+    this.drawingEntitiy.position = endPoint;
+    this.polygonPositions[this.polygonPositions.length - 1] = endPoint;
+    return this;
+  }
+
+}
