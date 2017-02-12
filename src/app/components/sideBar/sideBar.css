@@ -1,17 +1,48 @@
-.side-bar-scope{
+.side-bar-scope-open{
   width: 300px;
   /*top: 42px;*/
   background-color: rgba(39, 39, 39, 0.92);
-  height: calc(100% - 30px);
+  /*height: calc(100% - 30px);*/
+  height:100% ;
+  z-index: 1;
+  position: absolute;
+  right: 0;
+}
+.side-bar-scope-close{
+  width: 100px;
+  /*top: 42px;*/
+  background-color: rgba(39, 39, 39, 0.92);
+  /*height: calc(100% - 30px);*/
+  height:100% ;
   z-index: 1;
   position: absolute;
   right: 0;
 }
 .cesium-viewer-toolbar{
+  position: fixed;
   z-index: 1;
 }
-
-.side-bar-video-map{
+.side-bar-video-map-close{
+  position: relative;
+  left: 24px;
+}
+.image-panel{
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  z-index: 5;
+  top: 30px;
+  right: 1px;
+}
+.img{
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  z-index: 5;
+  top: 30px;
+  right: 1px;
+}
+.side-bar-video-map-open{
   height: 30%;
 }
 .side-bar-chat-message{

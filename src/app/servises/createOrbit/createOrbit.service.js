@@ -13,10 +13,10 @@ export class CreateOrbitService {
     let scaleCBP = function () {
       return dataModel[0].scale;
     };
-   let entity = this.viewer.entities.add({
+    let entity = this.viewer.entities.add({
       name: dataModel[0].nameE,
       position: new Cesium.CallbackProperty(()=> {
-        return coordinates[coordinates.length -1];
+        return coordinates[coordinates.length - 1];
       }, false),
       model: {
         uri: dataModel[0].treeDModel,
@@ -31,7 +31,8 @@ export class CreateOrbitService {
     entity.polyline = {
       positions: positionCBP
     };
-    entity.polyline.material = Cesium.Color.PERU;
+    entity.polyline.width = 10;
+    entity.polyline.material =  new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PERU);
   }
 
   enableDrawPointsIntoPolygon(distantPointsPolygon, modelsSelected) {
@@ -68,11 +69,10 @@ export class CreateOrbitService {
   }
 
 
-
-  enableDrawModel(dataModel) {
+  enableDrawModel(dataModel, status, entityId) {
     this.classModelDraw = new modelDraw(this.viewer);
 
-    return this.classModelDraw.setDraw(dataModel);
+    return this.classModelDraw.setDraw(dataModel, status, entityId);
   }
 
   enableDrawModelTrack(id) {
@@ -322,7 +322,7 @@ class polygonDraw {
     return {
       type: this.typeShape,
       coordinates: coordinates,
-      polylinePositions : this.polygonPositions
+      polylinePositions: this.polygonPositions
     }
   }
 
@@ -389,7 +389,7 @@ class polygonDraw {
     return this;
   }
 }
-class modelDraw{
+class modelDraw {
   constructor(viewer) {
     this._viewer = viewer;
     this.entityDraw = false;
@@ -404,8 +404,7 @@ class modelDraw{
     this._eventHandler = eventHandler;
   }
 
-  initDraw(dataModel) {
-    this._setupEvents();
+  create3DNew(dataModel) {
     let scaleCBP = function () {
       return dataModel.scale;
     };
@@ -420,6 +419,17 @@ class modelDraw{
         scale: new Cesium.CallbackProperty(scaleCBP, false)
       }
     });
+  }
+
+  initDraw(dataModel, status, entityId) {
+    this._setupEvents();
+    if (status === "3DNew") {
+      this.create3DNew(dataModel);
+    } else {
+      this.drawingEntitiy = this.viewer.entities.getOrCreateEntity(entityId);
+      //this.positions = this.drawingEntitiy.position;
+    }
+
 
   }
 
@@ -455,8 +465,8 @@ class modelDraw{
     viewer.scene.screenSpaceCameraController.enableTranslate = state;
   }
 
-  setDraw(dataModel) {
-    this.initDraw(dataModel);
+  setDraw(dataModel, status, entityId) {
+    this.initDraw(dataModel, status, entityId);
     this.disableCameraMotion(false, this.viewer);
     return this;
   }
@@ -466,7 +476,7 @@ class modelDraw{
     if (_.isUndefined(position)) {
       return;
     }
-    this.positions = position;
+    this.drawingEntitiy.position = position;
   }
 
 }
@@ -499,7 +509,8 @@ class modelDrawTrack {
     this.drawingEntitiy.polyline = {
       positions: positionCBP
     };
-    this.drawingEntitiy.polyline.material = Cesium.Color.PERU;
+    this.drawingEntitiy.polyline.width = 10;
+    this.drawingEntitiy.polyline.material = new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PERU);
   }
 
   _setupEvents() {

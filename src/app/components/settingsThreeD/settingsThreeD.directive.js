@@ -36,6 +36,8 @@ class SettingsThreeDController {
         //var orientation = Cesium.Transforms.headingPitchRollQuaternion(data.model.position._value, heading, pitch, roll);
 
         //data.model.orientation =orientation
+      }else {
+        this.display = false;
       }
 
       $scope.$evalAsync()
@@ -84,11 +86,28 @@ class SettingsThreeDController {
   }
 
   drawModelTrack() {
-    if(this.model.model.id !== undefined){
+    if (this.model.model.id !== undefined) {
       this.createOrbitService.enableDrawModelTrack(this.model.model.id)
     }
 
   }
 
+  drawModelMove() {
+    if (this.model.model.id !== undefined) {
+      if (this.model.model.polyline !== undefined) {
+        this.model.model.polyline.positions = null;
+      }
+
+      this.createOrbitService.enableDrawModel(undefined, "3DOld", this.model.model.id);
+    }
+
+  }
+
+  remove3D() {
+    if (this.model.model.id !== undefined) {
+      this.createOrbitService.removeById(this.model.model.id);
+    }
+    this.display = false;
+  }
 
 }

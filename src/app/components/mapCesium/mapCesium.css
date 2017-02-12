@@ -1,3 +1,22 @@
 .cesium-infoBox.cesium-infoBox-bodyless.cesium-infoBox-visible{
   display: none;
 }
+.cesium-viewer-animationContainer{
+  display: none;
+}
+.cesium-viewer-bottom{
+  display: none;
+}
+
+.cesium-widget, .cesium-widget canvas{
+  position: fixed;
+}
+.cesium-timeline-bar{
+  display: none;
+}
+.cesium-viewer-timelineContainer{
+  display: none;
+}
+.cesium-viewer-fullscreenContainer{
+  display: none !important;
+}

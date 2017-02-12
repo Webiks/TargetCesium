@@ -1,4 +1,3 @@
-
 /**
  * Created by netanel on 11/23/2016.
  */
@@ -9,7 +8,7 @@ export function SideBarDirective() {
     restrict: 'E',
     templateUrl: 'app/components/sideBar/sideBar.html',
     controller: SideBarController,
-    controllerAs: 'vm',
+    controllerAs: 'sideBarCtrl',
     bindToController: true
   };
 
@@ -18,9 +17,20 @@ export function SideBarDirective() {
 }
 
 class SideBarController {
-  constructor() {
+  constructor($element) {
     'ngInject';
+    console.log($element);
+    this.image = 'assets/open.svg';
+    this.isPanelOpen = true;
+  }
 
+  togglePanel() {
+    this.isPanelOpen =!this.isPanelOpen;
+    if(this.isPanelOpen){
+      this.image = 'assets/open.svg';
+    }else {
+      this.image = 'assets/close.svg';
+    }
   }
 
 }
