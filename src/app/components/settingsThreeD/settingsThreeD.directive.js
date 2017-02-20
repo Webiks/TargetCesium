@@ -17,8 +17,9 @@ export function SettingsThreeDDirective() {
 }
 
 class SettingsThreeDController {
-  constructor(eventsHandlerService, $window, $scope, createOrbitService) {
+  constructor(eventsHandlerService, $window, $scope, createOrbitService,playVideoService) {
     'ngInject';
+    this.playVideoService = playVideoService;
     this.createOrbitService = createOrbitService;
     this.$window = $window;
     let that = this;
@@ -109,5 +110,10 @@ class SettingsThreeDController {
     }
     this.display = false;
   }
+  //orbitLoop(){
+  //  this.createOrbitService.play(this.playVideoService.orbitLoopCzml(this.model.model.id));
+  //}
+
+
 
 }

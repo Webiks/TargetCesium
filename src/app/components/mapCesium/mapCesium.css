@@ -2,21 +2,24 @@
   display: none;
 }
 .cesium-viewer-animationContainer{
-  display: none;
+z-index: 8 !important;
 }
-.cesium-viewer-bottom{
-  display: none;
-}
-
-.cesium-widget, .cesium-widget canvas{
+.cesium-viewer{
   position: fixed;
 }
-.cesium-timeline-bar{
-  display: none;
-}
+/*.cesium-viewer-bottom{*/
+  /*display: none;*/
+/*}*/
+
+/*.cesium-widget, .cesium-widget canvas{*/
+  /*position: fixed;*/
+/*}*/
+/*.cesium-timeline-bar{*/
+  /*display: none;*/
+/*}*/
 .cesium-viewer-timelineContainer{
-  display: none;
+  z-index: 8 !important;
 }
-.cesium-viewer-fullscreenContainer{
-  display: none !important;
-}
+/*.cesium-viewer-fullscreenContainer{*/
+  /*display: none !important;*/
+/*}*/

@@ -1,0 +1,9 @@
+<div ng-show="itemsListCtrl.toggle" class="table">
+  <div class="content-table" ng-repeat="entity in itemsListCtrl.entities">
+    <div class="row-table" ng-click="itemsListCtrl.flyToModel(entity.id)" ng-if="entity.model !== undefined">
+      {{entity.id}}
+      <img ng-if="entity.model !== undefined" class="row-table-img" src="{{entity.data.image}}">
+    </div>
+
+  </div>
+</div>

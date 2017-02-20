@@ -19,6 +19,7 @@ import { SettingsThreeDDirective } from './components/settingsThreeD/settingsThr
 import { DrawingToolsDirective } from './components/drawingTools/drawingTools.directive';
 import { LeftSidebarDirective } from './components/leftSidebar/leftSidebar.directive';
 import { FloatingWindowDirective } from './components/floatingWindow/floatingWindow.directive';
+import {ItemsListDirective} from './components/itemsList/itemsList.directive';
 
 angular.module('goals', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngMessages', 'ngAria', 'ui.router', 'ngMaterial', 'toastr'])
   .constant('malarkey', malarkey)
@@ -40,4 +41,5 @@ angular.module('goals', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngM
   .directive('settingsThreeD', SettingsThreeDDirective)
   .directive('dragDrop', DragDropDirective)
   .directive('floatingWindow', FloatingWindowDirective)
+  .directive('itemsList', ItemsListDirective)
   .directive('drawingTools', DrawingToolsDirective);

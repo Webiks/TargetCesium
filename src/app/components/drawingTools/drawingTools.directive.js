@@ -14,9 +14,11 @@ export function DrawingToolsDirective() {
 }
 
 class DrawingToolsController {
-  constructor(createOrbitService) {
+  constructor(createOrbitService, eventsHandlerService) {
     'ngInject';
+    this.eventsHandlerService = eventsHandlerService;
     this.createOrbitService = createOrbitService;
+    this.toggleT = false;
     this.initDrawingTools();
     this.initEntities();
   }
@@ -48,6 +50,18 @@ class DrawingToolsController {
     });
 
     drawingTools.append('div')
+      .attr("class", "items-list")
+      .append('svg')
+      .attr("height", 30)
+      .attr("width", 30)
+      .append("svg:image")
+      .attr("height", 30)
+      .attr("width", 30)
+      .attr("xlink:href", 'assets/itemsList.svg').on('click', () => {
+      that.toggleTable();
+    });
+
+    drawingTools.append('div')
       .attr("class", "remove-shape")
       .append('svg')
       .attr("height", 30)
@@ -63,11 +77,9 @@ class DrawingToolsController {
 
   initEntities() {
     this.entity = this.createOrbitService.viewer.entities.getOrCreateEntity('drawingEntity');
-    this.entity.polygon = new Cesium.PolygonGraphics({
-    });
+    this.entity.polygon = new Cesium.PolygonGraphics({});
     this.entity.polygon.hierarchy = null;
-    this.entity.polyline = new Cesium.PolylineGraphics({
-    });
+    this.entity.polyline = new Cesium.PolylineGraphics({});
     this.entity.polyline.positions = null;
   }
 
@@ -84,7 +96,12 @@ class DrawingToolsController {
 
   }
 
-  removeShape(){
+  removeShape() {
     this.createOrbitService.removeById('drawingEntity')
+  }
+
+  toggleTable() {
+    this.toggleT = !this.toggleT;
+    this.eventsHandlerService.evokeCallbacks('toggleTable', {toggle: this.toggleT});
   }
 }

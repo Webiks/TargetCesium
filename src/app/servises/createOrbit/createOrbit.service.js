@@ -61,7 +61,7 @@ export class CreateOrbitService {
         scale: new Cesium.CallbackProperty(scaleCBP, false)
       }
     });
-
+    model.data = this.dataModel;
   }
 
   removeById(id) {
@@ -101,6 +101,11 @@ export class CreateOrbitService {
 
   setUrl(url) {
     this.url = url
+  }
+
+  flyToModel(id){
+    let entity  = this.viewer.entities.getOrCreateEntity(id);
+    this.viewer.flyTo(entity);
   }
 
   setDataModel(data) {
@@ -419,6 +424,7 @@ class modelDraw {
         scale: new Cesium.CallbackProperty(scaleCBP, false)
       }
     });
+    this.drawingEntitiy.data = dataModel;
   }
 
   initDraw(dataModel, status, entityId) {
@@ -501,7 +507,7 @@ class modelDrawTrack {
     this.drawingEntitiy = this.viewer.entities.getOrCreateEntity(id);
 
     this.polygonPositions = [];
-
+    this.polygonPositions.push(this.drawingEntitiy.position.getValue());
     const positionCBP = new Cesium.CallbackProperty(()=> {
       return this.polygonPositions;
     }, false);
@@ -568,8 +574,6 @@ class modelDrawTrack {
 
   setDraw(id) {
     this.initDraw(id);
-    //this.showPopup = showPopup;
-    //this.onDrawUpdate = _.isFunction(_onDrawUpdate) ? _onDrawUpdate : ()=> {};
     this.disableCameraMotion(false, this.viewer);
     return this;
   }

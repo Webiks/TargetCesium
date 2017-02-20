@@ -24,3 +24,10 @@
   top: 190px;
   cursor: pointer;
 }
+.items-list{
+  position: absolute;
+  z-index: 1;
+  left: 20px;
+  top: 240px;
+  cursor: pointer;
+}

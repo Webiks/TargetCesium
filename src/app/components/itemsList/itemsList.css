@@ -1,0 +1,37 @@
+.table {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: absolute;
+  width: calc(100% - 370px);
+  height: 160px;
+  z-index: 1;
+  left: 70px;
+  bottom: 0;
+  background-color: rgba(22, 22, 22, 0.85);
+}
+
+.content-table {
+
+}
+
+.row-table {
+  height: 35px;
+  background-color: #232323;
+  color: #f4f3f2;
+  border-bottom: 1px solid #3f3f3f;
+}
+
+
+.row-table:hover{
+  height: 35px;
+  background-color: #000000;
+  color: #f4f3f2;
+  border-bottom: 1px solid #3f3f3f;
+}
+
+.row-table-img{
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  right: 0;
+}

@@ -1,10 +1,12 @@
 .side-bar-scope-open{
   width: 300px;
-  /*top: 42px;*/
+  /* top: 42px; */
   background-color: rgba(39, 39, 39, 0.92);
-  /*height: calc(100% - 30px);*/
-  height:100% ;
+  height: calc(100% - 122px);
+  /* height: 100%; */
   z-index: 1;
+  top: 50px;
+  border-radius: 11px 0 0 0;
   position: absolute;
   right: 0;
 }
@@ -18,10 +20,10 @@
   position: absolute;
   right: 0;
 }
-.cesium-viewer-toolbar{
-  position: fixed;
-  z-index: 1;
-}
+/*.cesium-viewer-toolbar{*/
+  /*position: fixed;*/
+  /*z-index: 1;*/
+/*}*/
 .side-bar-video-map-close{
   position: relative;
   left: 24px;
